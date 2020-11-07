@@ -2114,6 +2114,9 @@ main(int argc, char *argv[])
 		defconfig[KioskMode].val.i = 1;
 		defconfig[KioskMode].prio = 2;
 		break;
+	case 'l':
+		startlocbar = 1;
+		break;
 	case 'm':
 		defconfig[Style].val.i = 0;
 		defconfig[Style].prio = 2;
@@ -2180,14 +2183,25 @@ main(int argc, char *argv[])
 	default:
 		usage();
 	} ARGEND;
-	if (argc > 0)
+	if (argc > 0) {
 		arg.v = argv[0];
-	else
+	} else {
+  /* sc0ttj : handle how to call surf, with optional location bar on load
+   * - if no -l and no URL, load homepage
+   * - if no -l plus a URL, load URL without location bar
+   * - if -l and no URL, load about:blank with location bar
+   * - if -l and a URL, load URL with location bar
+   */
+  	if (startlocbar) {
+	    arg.v = "about:blank";
+    } else {
 #ifdef HOMEPAGE
-		arg.v = HOMEPAGE;
+		  arg.v = HOMEPAGE;
 #else
-		arg.v = "about:blank";
+		  arg.v = "about:blank";
 #endif
+    }
+  }
 
 	setup();
 	c = newclient(NULL);
@@ -2195,6 +2209,12 @@ main(int argc, char *argv[])
 
 	loaduri(c, &arg);
 	updatetitle(c);
+
+	if (startlocbar) {
+		/* start directly into GO prompt */
+		Arg a = (Arg)SETPROP("_SURF_URI", "_SURF_GO", PROMPT_GO);
+		spawn(c, &a);
+	}
 
 	gtk_main();
 	cleanup();
