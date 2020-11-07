@@ -1,9 +1,9 @@
 #!/bin/sh
 #
-# See the LICENSE file for copyright and license details. 
+# See the LICENSE file for copyright and license details.
 #
 
-xidfile="$HOME/tmp/tabbed-surf.xid"
+xidfile="/tmp/tabbed-surf.xid"
 uri=""
 
 if [ "$#" -gt 0 ];
@@ -12,7 +12,7 @@ then
 fi
 
 runtabbed() {
-	tabbed -dn tabbed-surf -r 2 surf -e '' "$uri" >"$xidfile" \
+	tabbed -c -dn tabbed-surf -r 2 surf -e '' "$uri" >"$xidfile" \
 		2>/dev/null &
 }
 
