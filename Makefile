@@ -37,6 +37,7 @@ $(WOBJ):
 	$(CC) $(WEBEXTCFLAGS) $(CFLAGS) -c $(@:.o=.c)
 
 clean:
+	rm -f config.h
 	rm -f surf $(OBJ)
 	rm -f $(WLIB) $(WOBJ)
 

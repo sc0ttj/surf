@@ -16,6 +16,8 @@ static char **plugindirs    = (char*[]){
 	LIBPREFIX "/mozilla/plugins/",
 	NULL
 };
+static char *searchengine = "https://duckduckgo.com/?q=";
+#define HOMEPAGE "https://duckduckgo.com/"
 
 /* Webkit default features */
 /* Highest priority value will be used.
@@ -271,4 +273,3 @@ static Button buttons[] = {
 	{ OnMedia,      MODKEY,         1,      clickexternplayer, { 0 },       1 },
 };
 
-#define HOMEPAGE "https://startpage.com/"
