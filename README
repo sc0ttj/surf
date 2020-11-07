@@ -2,6 +2,34 @@ surf - simple webkit-based browser
 ==================================
 surf is a simple Web browser based on WebKit/GTK+.
 
+Changes to this fork
+------------
+
+## Patches added
+
+NONE YET
+
+<!--
+* Bookmarks
+* [Space search](https://surf.suckless.org/patches/spacesearch/)
+* [Search Engines](https://surf.suckless.org/patches/searchengines/)
+* [Home page](https://surf.suckless.org/patches/homepage/)
+* [Play External](https://surf.suckless.org/patches/playexternal)
+-->
+
+## Added key bindings
+
+* `Ctrl + =` - zoom in
+* `Ctrl + W` - play media on page in MPV
+* `Ctrl + Q` - quit
+
+## Changed default settings
+
+- changed CookiePolicies to refuse cookies from third-parties*
+- enabled DNSPrefetch, StrictTLS, WebGL
+
+* Note: `@Aa` is accept all, `@` is no 3rd parties and `a` is deny all.
+
 Requirements
 ------------
 In order to build surf you need GTK+ and Webkit/GTK+ header files.

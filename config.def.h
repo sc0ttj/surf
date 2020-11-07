@@ -18,6 +18,8 @@ static char **plugindirs    = (char*[]){
  * Per-uri parameters are priority 1
  * Command parameters are priority 2
  */
+
+/* sc0ttj enabled DNSPrefetch, StrictTLS, WebGL */
 static Parameter defconfig[ParameterLast] = {
 	/* parameter                    Arg value       priority */
 	[AcceleratedCanvas]   =       { { .i = 1 },     },
@@ -25,10 +27,10 @@ static Parameter defconfig[ParameterLast] = {
 	[AccessWebcam]        =       { { .i = 0 },     },
 	[Certificate]         =       { { .i = 0 },     },
 	[CaretBrowsing]       =       { { .i = 0 },     },
-	[CookiePolicies]      =       { { .v = "@Aa" }, },
+	[CookiePolicies]      =       { { .v = "@Aa"   }, },
 	[DefaultCharset]      =       { { .v = "UTF-8" }, },
 	[DiskCache]           =       { { .i = 1 },     },
-	[DNSPrefetch]         =       { { .i = 0 },     },
+	[DNSPrefetch]         =       { { .i = 1 },     },
 	[Ephemeral]           =       { { .i = 0 },     },
 	[FileURLsCrossAccess] =       { { .i = 0 },     },
 	[FontSize]            =       { { .i = 12 },    },
@@ -52,7 +54,7 @@ static Parameter defconfig[ParameterLast] = {
 	[SpellLanguages]      =       { { .v = ((char *[]){ "en_US", NULL }) }, },
 	[StrictTLS]           =       { { .i = 1 },     },
 	[Style]               =       { { .i = 1 },     },
-	[WebGL]               =       { { .i = 0 },     },
+	[WebGL]               =       { { .i = 1 },     },
 	[ZoomLevel]           =       { { .f = 1.0 },   },
 };
 
@@ -60,6 +62,39 @@ static UriParameters uriparams[] = {
 	{ "(://|\\.)suckless\\.org(/|$)", {
 	  [JavaScript] = { { .i = 0 }, 1 },
 	  [Plugins]    = { { .i = 0 }, 1 },
+	}, },
+/* sc0ttj added site specific settings, as examples */
+	{ "(://|\\.)google\\.com(/|$)", {         // The big bad Google
+	  [JavaScript] = { { .i = 0 }, 1 },       // no JavaScript
+	  [CookiePolicies] = { { .v = "@" }, 1 }, // Don't accept third party
+	  [Geolocation] = { { .i = 0 }, 1 },      // No Geolocation! Google knows anyway
+	}, },
+	{ "(://|\\.)gmail\\.com(/|$)", {
+	  [JavaScript] = { { .i = 0 }, 1 },
+	  [Geolocation] = { { .i = 0 }, 1 },
+	}, },
+	{ "(://|\\.)youtube\\.com(/|$)", {
+	  [JavaScript] = { { .i = 1 }, 1 },
+	  [Geolocation] = { { .i = 0 }, 1 },
+	}, },
+	{ "(://|\\.)facebook\\.com(/|$)", {
+	  [Plugins] = { { .i = 0 }, 1 },
+	  [CookiePolicies] = { { .v = "a" }, 1 }, // No cookies at all
+	}, },
+	{ "(://|\\.)tumblr\\.com(/|$)", {
+	  [Plugins] = { { .i = 0 }, 1 },
+	  [StrictTLS] = { { .i = 0 }, 1 },
+	  [CookiePolicies] = { { .v = "a" }, 1 }, // No cookies at all
+	}, },
+	{ "(://|\\.)wikipedia\\.org(/|$)", {
+	  [JavaScript] = { { .i = 1 }, 1 },
+	  [ZoomLevel] = { { .f = 1.20 }, 1 }, // custom zoom level
+	  [FontSize] = { { .i = 13 }, 1 },    // custom font size
+	}, },
+	{ "(://|\\.)wiki\\.archlinux\\.org(/|$)", {
+	  [JavaScript] = { { .i = 1 }, 1 },
+	  [ZoomLevel] = { { .f = 1.20 }, 1 }, // custom zoom level
+	  [FontSize] = { { .i = 14 }, 1 },    // custom font size
 	}, },
 };
 
@@ -104,7 +139,7 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
 /* VIDEOPLAY(URI) */
 #define VIDEOPLAY(u) {\
         .v = (const char *[]){ "/bin/sh", "-c", \
-             "mpv --really-quiet \"$0\"", u, NULL \
+             "mpv --really-quiet --x11-name \"mpv via surf\" \"$0\"", u, NULL \
         } \
 }
 
@@ -116,6 +151,10 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
 static SiteSpecific styles[] = {
 	/* regexp               file in $styledir */
 	{ ".*",                 "default.css" },
+/* sc0ttj added site specific CSS, as examples */
+//	{ ".*github.com.*",    "github.css" },
+//	{ ".*reddit.com.*",    "reddit.css" },
+//	{ ".*wikipedia.org.*", "wikipedia.css" },
 };
 
 /* certificates */
@@ -133,6 +172,13 @@ static SiteSpecific certs[] = {
 /*
  * If you use anything else but MODKEY and GDK_SHIFT_MASK, don't forget to
  * edit the CLEANMASK() macro.
+ */
+
+/*
+ * sc0ttj changed some hotkeys:
+ *   - Ctrl-Q    =  exit (close window)
+ *   - Ctrl-=    =  zoom+1
+ *
  */
 static Key keys[] = {
 	/* modifier              keyval          function    arg */
@@ -164,7 +210,8 @@ static Key keys[] = {
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_k,      zoom,       { .i = +1 } },
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_q,      zoom,       { .i = 0  } },
 	{ MODKEY,                GDK_KEY_minus,  zoom,       { .i = -1 } },
-	{ MODKEY,                GDK_KEY_equal,  zoom,       { .i = +1 } },
+	{ MODKEY,                GDK_KEY_plus,   zoom,       { .i = +1 } },
+	{ MODKEY,                GDK_KEY_equal,  zoom,       { .i = +1 } }, /* sc0ttj use 'equal' and 'plus' */
 
 	{ MODKEY,                GDK_KEY_p,      clipboard,  { .i = 1 } },
 	{ MODKEY,                GDK_KEY_y,      clipboard,  { .i = 0 } },
@@ -188,6 +235,7 @@ static Key keys[] = {
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_b,      toggle,     { .i = ScrollBars } },
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_t,      toggle,     { .i = StrictTLS } },
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_m,      toggle,     { .i = Style } },
+	{ MODKEY,                GDK_KEY_w,      playexternal, { 0 } }, /* sc0ttj added hotkey to call externel player */
 };
 
 /* button definitions */

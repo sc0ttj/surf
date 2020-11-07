@@ -5,6 +5,7 @@
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include <gio/gio.h>
 #include <webkit2/webkit-web-extension.h>
