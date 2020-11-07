@@ -322,7 +322,8 @@ usage(void)
 {
 	die("usage: surf [-bBdDfFgGiIkKmMnNpPsStTvwxX]\n"
 	    "[-a cookiepolicies ] [-c cookiefile] [-C stylefile] [-e xid]\n"
-	    "[-r scriptfile] [-u useragent] [-z zoomlevel] [uri]\n");
+	    "[-h cachedir] [-r scriptfile] [-u useragent]\n"
+	    "[-z zoomlevel] [uri]\n");
 }
 
 void
@@ -2068,6 +2069,9 @@ main(int argc, char *argv[])
 	case 'G':
 		defconfig[Geolocation].val.i = 1;
 		defconfig[Geolocation].prio = 2;
+		break;
+	case 'h':
+		cachedir = EARGF(usage());
 		break;
 	case 'i':
 		defconfig[LoadImages].val.i = 0;
