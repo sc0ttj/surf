@@ -20,6 +20,7 @@ static char **plugindirs    = (char*[]){
  */
 
 /* sc0ttj enabled DNSPrefetch, StrictTLS, WebGL */
+/* sc0ttj added ClipboardNotPrimary */
 static Parameter defconfig[ParameterLast] = {
 	/* parameter                    Arg value       priority */
 	[AcceleratedCanvas]   =       { { .i = 1 },     },
@@ -27,6 +28,7 @@ static Parameter defconfig[ParameterLast] = {
 	[AccessWebcam]        =       { { .i = 0 },     },
 	[Certificate]         =       { { .i = 0 },     },
 	[CaretBrowsing]       =       { { .i = 0 },     },
+	[ClipboardNotPrimary] =       { { .i = 1 },     },
 	[CookiePolicies]      =       { { .v = "@Aa"   }, },
 	[DefaultCharset]      =       { { .v = "UTF-8" }, },
 	[DiskCache]           =       { { .i = 1 },     },
@@ -56,7 +58,6 @@ static Parameter defconfig[ParameterLast] = {
 	[Style]               =       { { .i = 1 },     },
 	[WebGL]               =       { { .i = 1 },     },
 	[ZoomLevel]           =       { { .f = 1.0 },   },
-	[ClipboardNotPrimary] =				{ { .i = 1 },			},
 };
 
 static UriParameters uriparams[] = {
@@ -249,7 +250,8 @@ static Key keys[] = {
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_b,      toggle,     { .i = ScrollBars } },
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_t,      toggle,     { .i = StrictTLS } },
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_m,      toggle,     { .i = Style } },
-	{ MODKEY,                GDK_KEY_w,      playexternal, { 0 } }, /* sc0ttj added hotkey to call externel player */
+	/* sc0ttj added hotkey to call externel player */
+	{ MODKEY,                GDK_KEY_w,      playexternal, { 0 } },
 };
 
 /* button definitions */
@@ -263,3 +265,5 @@ static Button buttons[] = {
 	{ OnAny,        0,              9,      clicknavigate,  { .i = +1 },    1 },
 	{ OnMedia,      MODKEY,         1,      clickexternplayer, { 0 },       1 },
 };
+
+#define HOMEPAGE "https://startpage.com/"
