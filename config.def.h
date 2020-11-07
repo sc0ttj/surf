@@ -6,6 +6,10 @@ static char *styledir       = "~/.surf/styles/";
 static char *certdir        = "~/.surf/certificates/";
 static char *cachedir       = "~/.surf/cache/";
 static char *cookiefile     = "~/.surf/cookies.txt";
+static char *scriptfiles[]  = {
+ "~/.surf/addons/addon-1.js",
+ "~/.surf/addons/addon-2.js",
+};
 static char **plugindirs    = (char*[]){
 	"~/.surf/plugins/",
 	LIBPREFIX "/mozilla/plugins/",

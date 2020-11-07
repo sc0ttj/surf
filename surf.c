@@ -356,7 +356,9 @@ setup(void)
 
 	/* dirs and files */
 	cookiefile = buildfile(cookiefile);
-	scriptfile = buildfile(scriptfile);
+	for (i = 0; i < LENGTH(scriptfiles); i++) {
+	  scriptfiles[i] = buildfile(scriptfiles[i]);
+	}
 	certdir    = buildpath(certdir);
 	if (curconfig[Ephemeral].val.i)
 		cachedir = NULL;
@@ -970,9 +972,11 @@ runscript(Client *c)
 	gchar *script;
 	gsize l;
 
-	if (g_file_get_contents(scriptfile, &script, &l, NULL) && l)
-		evalscript(c, "%s", script);
-	g_free(script);
+	for (int i = 0; i < LENGTH(scriptfiles); i++) {
+		if (g_file_get_contents(scriptfiles[i], &script, &l, NULL) && l)
+			evalscript(c, "%s", script);
+		g_free(script);
+	}
 }
 
 void
@@ -1035,9 +1039,9 @@ newwindow(Client *c, const Arg *a, int noembed)
 	cmd[i++] = curconfig[Style].val.i ?           "-M" : "-m" ;
 	cmd[i++] = curconfig[Inspector].val.i ?       "-N" : "-n" ;
 	cmd[i++] = curconfig[Plugins].val.i ?         "-P" : "-p" ;
-	if (scriptfile && g_strcmp0(scriptfile, "")) {
+	if (scriptfiles[0] && g_strcmp0(scriptfiles[0], "")) {
 		cmd[i++] = "-r";
-		cmd[i++] = scriptfile;
+		cmd[i++] = scriptfiles[0];
 	}
 	cmd[i++] = curconfig[JavaScript].val.i ? "-S" : "-s";
 	cmd[i++] = curconfig[StrictTLS].val.i ? "-T" : "-t";
@@ -1101,9 +1105,12 @@ cleanup(void)
 	close(spair[0]);
 	close(spair[1]);
 	g_free(cookiefile);
-	g_free(scriptfile);
 	g_free(stylefile);
 	g_free(cachedir);
+	for (int i = 0; i < LENGTH(scriptfiles); i++) {
+		g_free(scriptfiles[i]);
+	}
+
 	XCloseDisplay(dpy);
 }
 
@@ -2121,7 +2128,7 @@ main(int argc, char *argv[])
 		defconfig[Plugins].prio = 2;
 		break;
 	case 'r':
-		scriptfile = EARGF(usage());
+		scriptfiles[0] = EARGF(usage());
 		break;
 	case 's':
 		defconfig[JavaScript].val.i = 0;
