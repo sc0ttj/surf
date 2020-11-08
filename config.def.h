@@ -18,7 +18,37 @@ static char **plugindirs    = (char*[]){
 };
 #define HOMEPAGE "https://duckduckgo.com/"
 static char *searchengine = "https://duckduckgo.com/?q=%s";
-
+/* sc0ttj  added lots of custom search engines:
+ *
+ * Note: any search in location bar that is not a URL, file
+ *       or prefixed custom search (below), will fall back
+ *       to using the first search engine in this list.
+*/
+static SearchEngine searchengines[] = {
+	{ "dg",  "https://duckduckgo.com/?q=%s"   },
+	{ "ar",  "https://archive.org/search.php?query=%s"   },
+	{ "aw",  "https://wiki.archlinux.org/index.php?search=%s"   },
+	{ "bbc", "https://www.bbc.co.uk/search?q=%s"   },
+	{ "gg",  "http://www.google.com/search?q=%s"   },
+	{ "gh",  "https://github.com/search?q=%s"   },
+	{ "gist", "https://gist.github.com/search?q=%s"   },
+	{ "gi",  "https://www.google.com/search?&q=%s&oq=%s"   },
+	{ "im",  "https://www.imdb.com/find?q=%s"   },
+	{ "man", "http://manpages.org/%s/1" },
+	{ "pf",  "https://forum.puppylinux.com/search.php?keywords=%s" },
+	{ "pl",  "https://ww1.put-locker.com/?s=%s" },
+	{ "sc",  "https://soundcloud.com/search?q=%s" },
+	{ "sp",  "https://startpage.com/%s/search" },
+	{ "so",  "https://stackoverflow.com/search?q=%s" },
+	{ "sx",  "https://stackexchange.com/search?q=%s" },
+	{ "tw",  "https://twitter.com/search?q=%s&src=typed_query" },
+	{ "txt",  "https://www.textise.net/showText.aspx?strURL=https%253A//www.google.com/search%253Fq%253D%s" },
+	{ "ud",  "https://www.urbandictionary.com/define.php?term=%s" },
+	{ "ux",  "https://unix.stackexchange.com/search?q=%s" },
+	{ "yt",  "https://www.youtube.com/results?search_query=%s" },
+	{ "wb",  "https://web.archive.org/web/*/%s" },
+	{ "wk",  "https://en.wikipedia.org/wiki/%s" },
+};
 /* Webkit default features */
 /* Highest priority value will be used.
  * Default parameters are priority 0
@@ -113,7 +143,9 @@ static int winsize[] = { 800, 600 };
 static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
                                     WEBKIT_FIND_OPTIONS_WRAP_AROUND;
 
-#define PROMPT_GO   "Go:"
+/* sc0ttj location bar now accepts URLs, custom search engine cmds, and
+*         arbitrary search terms, so rename the label to reflect this */
+#define PROMPT_GO   "Web search:"
 #define PROMPT_FIND "Find:"
 
 /* SETPROP(readprop, setprop, prompt)*/
@@ -127,6 +159,7 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
         } \
 }
 
+/* sc0ttj this is not used - doesn't support custom search engines */
 #define SEARCH() { \
         .v = (const char *[]){ "/bin/sh", "-c", \
              "xprop -id $1 -f $2 8s -set $2 \"" \
@@ -249,8 +282,9 @@ static Key keys[] = {
 	{ MODKEY,                GDK_KEY_n,      find,       { .i = +1 } },
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_n,      find,       { .i = -1 } },
 
-	{ MODKEY,                GDK_KEY_s,      spawn,      SEARCH() },
-
+/* sc0ttj disable this search - does not supprt custom search engines
+ 	{ MODKEY,                GDK_KEY_s,      spawn,      SEARCH() },
+*/
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_p,      print,      { 0 } },
 	{ MODKEY,                GDK_KEY_t,      showcert,   { 0 } },
 
