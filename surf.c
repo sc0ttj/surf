@@ -33,8 +33,9 @@
 #include "arg.h"
 #include "common.h"
 
-#define LENGTH(x)               (sizeof(x) / sizeof(x[0]))
-#define CLEANMASK(mask)         (mask & (MODKEY|GDK_SHIFT_MASK))
+#define LENGTH(x)        (sizeof(x) / sizeof(x[0]))
+/* sc0ttj support MOD1 key (usually ALT) in key bindings  */
+#define CLEANMASK(mask)  (mask & (MODKEY|GDK_SHIFT_MASK|GDK_MOD1_MASK))
 
 enum { AtomFind, AtomSearch, AtomGo, AtomUri, AtomLast };
 

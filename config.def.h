@@ -244,14 +244,18 @@ static SiteSpecific certs[] = {
 
 /*
  * sc0ttj changed some hotkeys:
- *   - Ctrl-Q    =  exit (close window)
+ *   - Ctrl-l    =  open location bar (omnibar)
+ *   - Ctrl-q    =  exit (close window)
  *   - Ctrl-=    =  zoom+1
- *   - Ctrl-b    =  open bookmarks
+ *   - Ctrl-b    =  open bookmarks menu
  *   - Ctrl-d    =  bookmark current page
+ *   - Alt-left  =  go back a page
+ *   - Alt-right =  go forward a page
  *
  */
 static Key keys[] = {
 	/* modifier              keyval          function    arg */
+	{ MODKEY,                GDK_KEY_l,      spawn,      SETPROP("_SURF_URI", "_SURF_GO", PROMPT_GO) },
 	{ MODKEY,                GDK_KEY_g,      spawn,      SETPROP("_SURF_URI", "_SURF_GO", PROMPT_GO) },
 	{ MODKEY,                GDK_KEY_f,      spawn,      SETPROP("_SURF_FIND", "_SURF_FIND", PROMPT_FIND) },
 	{ MODKEY,                GDK_KEY_slash,  spawn,      SETPROP("_SURF_FIND", "_SURF_FIND", PROMPT_FIND) },
@@ -274,6 +278,10 @@ static Key keys[] = {
 	{ MODKEY,                GDK_KEY_l,      navigate,   { .i = +1 } },
 	{ MODKEY,                GDK_KEY_h,      navigate,   { .i = -1 } },
 
+	/* sc0ttj use Alt-left and Alt-right to go back/forward in history */
+	{ GDK_MOD1_MASK,         GDK_KEY_Right,  navigate,   { .i = +1 } },
+	{ GDK_MOD1_MASK,         GDK_KEY_Left,   navigate,   { .i = -1 } },
+
 	/* vertical and horizontal scrolling, in viewport percentage */
 /*
 	{ MODKEY,                GDK_KEY_j,      scrollv,    { .i = +10 } },
@@ -284,9 +292,11 @@ static Key keys[] = {
 	{ MODKEY,                GDK_KEY_u,      scrollh,    { .i = -10 } },
 */
 
-
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_j,      zoom,       { .i = -1 } },
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_k,      zoom,       { .i = +1 } },
+
+	{ MODKEY,                GDK_KEY_0,      zoom,       { .i = 0  } },
+
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_q,      zoom,       { .i = 0  } },
 	{ MODKEY,                GDK_KEY_minus,  zoom,       { .i = -1 } },
 	{ MODKEY,                GDK_KEY_plus,   zoom,       { .i = +1 } },
@@ -316,6 +326,20 @@ static Key keys[] = {
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_m,      toggle,     { .i = Style } },
 	/* sc0ttj added hotkey to call externel player */
 	{ MODKEY,                GDK_KEY_w,      playexternal, { 0 } },
+
+  /* sc0ttj support special keyboard keys.. see this link: */
+  /* https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values */
+	{ 0,                     GDK_KEY_Find,    spawn,      SETPROP("_SURF_FIND", "_SURF_FIND", PROMPT_FIND) },
+	{ 0,                     GDK_KEY_Search,  spawn,      SETPROP("_SURF_URI", "_SURF_GO", PROMPT_GO) },
+	{ 0,                     GDK_KEY_ZoomOut, zoom,       { .i = -1 } },
+	{ 0,                     GDK_KEY_ZoomIn,  zoom,       { .i = +1 } },
+	{ 0,                     GDK_KEY_Back,    navigate,   { .i = -1 } },
+	{ 0,                     GDK_KEY_Forward, navigate,   { .i = +1 } },
+	{ 0,                     GDK_KEY_Refresh, reload,     { .i = 0 } },
+	{ 0,                     GDK_KEY_Reload,  reload,     { .i = 0 } },
+	{ 0,                     GDK_KEY_Stop,    stop,       { 0 } },
+	{ 0,                     GDK_KEY_Favorites, spawn,    BM_PICK },
+	{ 0,                     GDK_KEY_MySites, spawn,      BM_PICK },
 };
 
 /* button definitions */
