@@ -17,7 +17,6 @@ static char **plugindirs    = (char*[]){
 	NULL
 };
 #define HOMEPAGE "https://duckduckgo.com/"
-static char *searchengine = "https://duckduckgo.com/?q=%s";
 /* sc0ttj  added lots of custom search engines:
  *
  * Note: any search in location bar that is not a URL, file

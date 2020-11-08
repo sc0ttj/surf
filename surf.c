@@ -597,7 +597,7 @@ loaduri(Client *c, const Arg *a)
 			url = g_strdup_printf("file://%s", path);
 			free(path);
 	  } else if (*uri == ' ') {
-		  url = g_strdup_printf("%s%s", searchengine, uri + 1);
+		  url = g_strdup_printf("%s%s", searchengines[0].uri, uri + 1);
 		} else {
 			url = parseuri(uri);
 		}
@@ -623,7 +623,7 @@ search(Client *c, const Arg *a)
 	Arg arg;
 	char *url;
 
-	url = g_strdup_printf(searchengine, a->v);
+	url = g_strdup_printf(searchengines[0].uri, a->v);
 	arg.v = url;
 	loaduri(c, &arg);
 
