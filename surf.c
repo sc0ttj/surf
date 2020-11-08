@@ -332,7 +332,7 @@ die(const char *errstr, ...)
 void
 usage(void)
 {
-	die("usage: surf [-bBdDfFgGiIkKmMnNpPsStTvwxX]\n"
+	die("usage: surf [-bBdDfFgGiIkKlmMnNpPsStTvwxX]\n"
 	    "[-a cookiepolicies ] [-c cookiefile] [-C stylefile] [-e xid]\n"
 	    "[-h cachedir] [-r scriptfile] [-u useragent]\n"
 	    "[-z zoomlevel] [uri]\n");
