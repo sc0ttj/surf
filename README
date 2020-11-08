@@ -13,7 +13,7 @@ Changes to this fork
 - default homepage if no URL given (disabled if -l only option)
   - modified "default homepage" and "startgo" patches
 - bookmarks patch (save your bookmarks in ~/.surf/bookmarks)
--- improved downloads
+- improved downloads
    - always download to ~/Downloads
    - slightly nicer popup
 - faster scroll patch
