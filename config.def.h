@@ -168,10 +168,11 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
         } \
 }
 
+/* sc0ttj always save to ~/Downloads, slightly nicer pop up  */
 /* DOWNLOAD(URI, referer) */
 #define DOWNLOAD(u, r) { \
         .v = (const char *[]){ "st", "-g", "84x8", "-e", "/bin/sh", \
-             "-c", "curl -g -L -J -O -A \"$1\" -b \"$2\" -c \"$2\"" \
+             "-c", "cd ~/Downloads; curl -g -L -J -O -A \"$1\" -b \"$2\" -c \"$2\"" \
              " -e \"$3\" \"$4\"; echo; echo 'Finished.'; read", \
              "surf-download", useragent, cookiefile, r, u, NULL \
         } \
