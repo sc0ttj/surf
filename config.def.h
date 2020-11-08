@@ -151,7 +151,7 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
 #define SETPROP(r, s, p) { \
         .v = (const char *[]){ "/bin/sh", "-c", \
              "prop=\"$(printf '%b' \"$(xprop -id $1 $2 " \
-             "| sed \"s/^$2(STRING) = //;s/^\\\"\\(.*\\)\\\"$/\\1/\" && cat ~/.surf/bookmarks)\" " \
+             "| sed \"s/^$2(STRING) = //;s/^\\\"\\(.*\\)\\\"$/\\1/\" && sort -u ~/.surf/bookmarks)\" " \
              "| dmenu -l 10 -p \"$4\" -w $1)\" && " \
              "xprop -id $1 -f $3 8u -set $3 \"$prop\"", \
              "surf-setprop", winid, r, s, p, NULL \
@@ -190,20 +190,26 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
 /* VIDEOPLAY(URI) */
 #define VIDEOPLAY(u) {\
         .v = (const char *[]){ "/bin/sh", "-c", \
-             "mpv --really-quiet --x11-name \"mpv via surf\" \"$0\"", u, NULL \
+             "mpv --really-quiet --x11-name 'mpv via surf' \"$0\"", u, NULL \
         } \
 }
 
-/* BM_ADD(readprop) */
-#define BM_ADD(r) {\
-        .v = (const char *[]){ "/bin/sh", "-c", \
-             "(echo $(xprop -id $0 $1) | cut -d '\"' -f2 " \
-             "| sed 's/.*https*:\\/\\/\\(www\\.\\)\\?//' && cat ~/.surf/bookmarks) " \
-             "| awk '!seen[$0]++' > ~/.surf/bookmarks.tmp && " \
-             "mv ~/.surf/bookmarks.tmp ~/.surf/bookmarks", \
-             winid, r, NULL \
-        } \
-}
+/* sc0ttj added Ctrl-D, Ctrl-B dmenu-based bookmarking, no sh scripts */
+#define BM_PICK {\
+   .v = (char *[]){ "/bin/sh", "-c", \
+     "xprop -id $0 -f _SURF_GO 8s -set _SURF_GO 2>/dev/null \
+     `sort -u ~/.surf/bookmarks \
+      | dmenu -p 'Load Bookmark' -i -l 10 -w $0 \
+      | awk '{print $1}' || exit 0`", \
+    winid, NULL } }
+
+#define BM_ADD {\
+    .v = (const char *[]){ "/bin/sh", "-c", \
+         "(echo $(xprop -id $0 _SURF_URI) | cut -d '\"' -f2 " \
+         "&& sort -u ~/.surf/bookmarks) " \
+         "| dmenu -i -p 'Save Bookmark' -i -l 10 -w $0 "  \
+         ">> ~/.surf/bookmarks", \
+         winid, NULL } }
 
 /* styles */
 /*
@@ -240,6 +246,8 @@ static SiteSpecific certs[] = {
  * sc0ttj changed some hotkeys:
  *   - Ctrl-Q    =  exit (close window)
  *   - Ctrl-=    =  zoom+1
+ *   - Ctrl-b    =  open bookmarks
+ *   - Ctrl-d    =  bookmark current page
  *
  */
 static Key keys[] = {
@@ -247,7 +255,13 @@ static Key keys[] = {
 	{ MODKEY,                GDK_KEY_g,      spawn,      SETPROP("_SURF_URI", "_SURF_GO", PROMPT_GO) },
 	{ MODKEY,                GDK_KEY_f,      spawn,      SETPROP("_SURF_FIND", "_SURF_FIND", PROMPT_FIND) },
 	{ MODKEY,                GDK_KEY_slash,  spawn,      SETPROP("_SURF_FIND", "_SURF_FIND", PROMPT_FIND) },
-	{ MODKEY,                GDK_KEY_m,      spawn,      BM_ADD("_SURF_URI") },
+  /* sc0ttj disable this search - does not support custom search engines
+ 	{ MODKEY,                GDK_KEY_s,      spawn,      SEARCH() },
+  */
+
+	/* sc0ttj nice bookmarks menu */
+	{ MODKEY,                GDK_KEY_b,      spawn,      BM_PICK },
+	{ MODKEY,                GDK_KEY_d,      spawn,      BM_ADD },
 
 	{ MODKEY,                GDK_KEY_q,      exit,       { 0 } },
 
@@ -261,12 +275,14 @@ static Key keys[] = {
 	{ MODKEY,                GDK_KEY_h,      navigate,   { .i = -1 } },
 
 	/* vertical and horizontal scrolling, in viewport percentage */
+/*
 	{ MODKEY,                GDK_KEY_j,      scrollv,    { .i = +10 } },
 	{ MODKEY,                GDK_KEY_k,      scrollv,    { .i = -10 } },
 	{ MODKEY,                GDK_KEY_space,  scrollv,    { .i = +50 } },
 	{ MODKEY,                GDK_KEY_b,      scrollv,    { .i = -50 } },
 	{ MODKEY,                GDK_KEY_i,      scrollh,    { .i = +10 } },
 	{ MODKEY,                GDK_KEY_u,      scrollh,    { .i = -10 } },
+*/
 
 
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_j,      zoom,       { .i = -1 } },
@@ -282,9 +298,6 @@ static Key keys[] = {
 	{ MODKEY,                GDK_KEY_n,      find,       { .i = +1 } },
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_n,      find,       { .i = -1 } },
 
-/* sc0ttj disable this search - does not supprt custom search engines
- 	{ MODKEY,                GDK_KEY_s,      spawn,      SEARCH() },
-*/
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_p,      print,      { 0 } },
 	{ MODKEY,                GDK_KEY_t,      showcert,   { 0 } },
 
