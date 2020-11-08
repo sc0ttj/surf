@@ -13,7 +13,9 @@ Changes to this fork
 - default homepage if no URL given (disabled if -l only option)
   - modified "default homepage" and "startgo" patches
 - bookmarks patch (save your bookmarks in ~/.surf/bookmarks)
-- improved downloads
+- sensible hotkeys, and more of them
+- support special browser-specific keyboard keys
+- improved downloads:
    - always download to ~/Downloads
    - slightly nicer popup
 - faster scroll patch
@@ -21,18 +23,55 @@ Changes to this fork
 - multiple JS files patch (add to  ~/.surf/addons/*.js)
 - utf8 dmenu fix
 - enable DNSPrefetch, StrictTLS, WebGL by default
-- added: hotkeys
-  - Ctr-Q to quit
-  - Ctrl-= to zoom in
-  - Ctrl-w to call externel player
 - added: site specific browser settings
 - added: site specific CSS
-- fixes in `surf-open.sh`
+- fixes in `surf-open.sh`:
   - close window when all tabs closed
+
+## Key bindings
+
+I've added hot keys that are more like Firefox, Chrome, etc.
+
+Here are the key bindings I have added to this fork:
+
+```
+  ctrl-l         # open location/search bar (omnibar)
+  alt-left       # go back one page
+  alt-right      # go forward on page
+  ctrl-b         # bookmarks menu
+  ctrl-d         # bookmark current page
+  ctrl-+/=       # zoom in
+  ctrl-minus     # zoom out
+  ctrl-0         # reset zoom
+  ctrl-w         # to call externel player
+  ctrl-q         # quit the browser
+```
+
+Browser-specific keyboard keys supported:
+
+```
+  Forward, Back, Refresh, Favorites, Find (in page),
+  Search (URL), ZoomIn, ZoomOut'
+```
+
+Note: All standard `surf` key bindings are still supported, except these ones:
+
+```
+	ctrl-j,      scroll up 10% +10
+	ctrl-i,      scroll up 10% +10
+	ctrl-space,  scroll up 50% +50
+	ctrl-k,      scroll down 10% -10
+	ctrl-u,      scroll down 10% -10
+	ctrl-b,      scroll down 50% -50
+```
 
 ## Config
 
 See `config.def.h`
+
+## End of fork
+
+End of my changes, see regular `surf` README below.
 
 ---
 
