@@ -5,30 +5,36 @@ surf is a simple Web browser based on WebKit/GTK+.
 Changes to this fork
 ------------
 
-## Patches added
+## Features added
 
-NONE YET
+- omnibar & custom search engines
+  - modified "space search" & "searchengines" patches
+- new `-l` option, to open locator bar on startup
+- default homepage if no URL given (disabled if -l only option)
+  - modified "default homepage" and "startgo" patches
+- bookmarks patch (save your bookmarks in ~/.surf/bookmarks)
+-- improved downloads
+   - always download to ~/Downloads
+   - slightly nicer popup
+- faster scroll patch
+- clipboard patch (choose PRIMARY or CLIPBOARD at compile time)
+- multiple JS files patch (add to  ~/.surf/addons/*.js)
+- utf8 dmenu fix
+- enable DNSPrefetch, StrictTLS, WebGL by default
+- added: hotkeys
+  - Ctr-Q to quit
+  - Ctrl-= to zoom in
+  - Ctrl-w to call externel player
+- added: site specific browser settings
+- added: site specific CSS
+- fixes in `surf-open.sh`
+  - close window when all tabs closed
 
-<!--
-* Bookmarks
-* [Space search](https://surf.suckless.org/patches/spacesearch/)
-* [Search Engines](https://surf.suckless.org/patches/searchengines/)
-* [Home page](https://surf.suckless.org/patches/homepage/)
-* [Play External](https://surf.suckless.org/patches/playexternal)
--->
+## Config
 
-## Added key bindings
+See `config.def.h`
 
-* `Ctrl + =` - zoom in
-* `Ctrl + W` - play media on page in MPV
-* `Ctrl + Q` - quit
-
-## Changed default settings
-
-- changed CookiePolicies to refuse cookies from third-parties*
-- enabled DNSPrefetch, StrictTLS, WebGL
-
-* Note: `@Aa` is accept all, `@` is no 3rd parties and `a` is deny all.
+---
 
 Requirements
 ------------
