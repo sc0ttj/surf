@@ -153,7 +153,7 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
              "prop=\"$(printf '%b' \"$(xprop -id $1 $2 " \
              "| sed \"s/^$2(STRING) = //;s/^\\\"\\(.*\\)\\\"$/\\1/\" \
               | grep -v '_SURF_FIND' \
-              && sort -u ~/.surf/bookmarks)\" " \
+              && tac ~/.surf/bookmarks)\" " \
              "| dmenu -l 10 -p \"$4\" -w $1)\" && " \
              "xprop -id $1 -f $3 8u -set $3 \"$prop\"", \
              "surf-setprop", winid, r, s, p, NULL \
@@ -200,9 +200,9 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
 #define BM_PICK {\
    .v = (char *[]){ "/bin/sh", "-c", \
      "xprop -id $0 -f _SURF_GO 8s -set _SURF_GO 2>/dev/null \
-     `sort -u ~/.surf/bookmarks \
+     $(tac ~/.surf/bookmarks \
       | dmenu -p 'Load Bookmark' -i -l 10 -w $0 \
-      | awk '{print $1}' || exit 0`", \
+      | awk '{print $1}' || exit 0)", \
     winid, NULL } }
 
 #define BM_ADD {\

@@ -588,17 +588,22 @@ loaduri(Client *c, const Arg *a)
 	    g_str_has_prefix(uri, "https://") ||
 	    g_str_has_prefix(uri, "file://")  ||
 	    g_str_has_prefix(uri, "about:")) {
-		url = g_strdup(uri);
+		// sc0ttj  allow web search to parse bookmarks, which may have
+		//         space separated "tags" after URL - so trim * after space
+		if ((strstr(uri, " "))) {
+			url = g_strsplit(g_strdup(uri), " ", NULL)[0];
+		} else {
+			url = g_strdup(uri);
+		}
 	} else {
-		if (uri[0] == '~')
+		if (uri[0] == '~') {
 			apath = untildepath(uri);
-		else
+		} else {
 			apath = (char *)uri;
+		}
 		if (!stat(apath, &st) && (path = realpath(apath, NULL))) {
 			url = g_strdup_printf("file://%s", path);
 			free(path);
-	  } else if (*uri == ' ') {
-		  url = g_strdup_printf("%s%s", searchengines[0].uri, uri + 1);
 		} else {
 			url = parseuri(uri);
 		}
@@ -1847,21 +1852,42 @@ destroywin(GtkWidget* w, Client *c)
 gchar *
 parseuri(const gchar *uri) {
 	guint i;
+	char *foo;
 
 	for (i = 0; i < LENGTH(searchengines); i++) {
+
 		if (searchengines[i].token == NULL || searchengines[i].uri == NULL ||
-		    *(uri + strlen(searchengines[i].token)) != ' ')
+		    *(uri + strlen(searchengines[i].token)) != ' ') {
 			continue;
-		if (g_str_has_prefix(uri, searchengines[i].token))
+		}
+
+		if (g_str_has_prefix(uri, searchengines[i].token)) {
 			return g_strdup_printf(searchengines[i].uri,
 					       uri + strlen(searchengines[i].token) + 1);
+		}
 	}
 
 	/* sc0ttj simple omnisearch - use default search engine for all
-	 *        non-URL and non-custom search engine uris
+	 *        non-URL and non-custom search engine uris, except if *uri
+	 *        has no spaces and contains a dot, assume it's a partial URL
 	 */
-	return g_strdup_printf(searchengines[0].uri,
-					       uri);
+  // dumb hack: if we got foo.bar, assume its a domain, or partial url,
+  // and that the user wants https://
+	if (!(strstr(uri, " ")) && (strstr(uri, "."))) {
+    g_strdup_printf("https://%s",  uri);
+    return g_strdup_printf("https://%s",  uri);
+  }
+
+  if (g_str_has_prefix(uri, "http")) {
+    if ((strstr(uri, " "))) {
+      foo = g_strsplit(g_strdup(uri), " ", NULL)[0];
+      return foo;
+    }
+    return g_strdup(uri);
+  }
+
+  // else, use the default search engine to look for results
+  return g_strdup_printf(searchengines[0].uri, uri);
 }
 
 void
