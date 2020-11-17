@@ -7,6 +7,7 @@ Changes to this fork
 
 ## Features added
 
+- requires a patched dmenu (https://github.com/sc0ttj/dmenu) with the `-t` option
 - omnibar & custom search engines
   - modified "space search" & "searchengines" patches
 - new `-l` option, to open locator bar on startup
@@ -27,6 +28,7 @@ Changes to this fork
 - added: site specific CSS
 - fixes in `surf-open.sh`:
   - close window when all tabs closed
+- added some scripts to `extras/` (not being used yet)
 
 ## Key bindings
 
