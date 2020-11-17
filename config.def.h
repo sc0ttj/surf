@@ -2,17 +2,19 @@
 static int surfuseragent    = 1;  /* Append Surf version to default WebKit user agent */
 static char *fulluseragent  = ""; /* Or override the whole user agent string */
 static int startlocbar      = 0;  /* Show location bar on startup (1=yes, 0=no) */
-static char *scriptfile     = "~/.surf/script.js";
-static char *styledir       = "~/.surf/styles/";
-static char *certdir        = "~/.surf/certificates/";
-static char *cachedir       = "~/.surf/cache/";
-static char *cookiefile     = "~/.surf/cookies.txt";
+
+
+static char *scriptfile     = "~/.config/surf/script.js";
+static char *styledir       = "~/.config/surf/styles/";
+static char *certdir        = "~/.config/surf/certificates/";
+static char *cachedir       = "~/.config/surf/cache/";
+static char *cookiefile     = "~/.config/surf/cookies.txt";
 static char *scriptfiles[]  = {
- "~/.surf/addons/addon-1.js",
- "~/.surf/addons/addon-2.js",
+ "~/.config/surf/addons/addon-1.js",
+ "~/.config/surf/addons/addon-2.js",
 };
 static char **plugindirs    = (char*[]){
-	"~/.surf/plugins/",
+	"~/.config/surf/plugins/",
 	LIBPREFIX "/mozilla/plugins/",
 	NULL
 };
@@ -153,7 +155,7 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
              "prop=\"$(printf '%b' \"$(xprop -id $1 $2 " \
              "| sed \"s/^$2(STRING) = //;s/^\\\"\\(.*\\)\\\"$/\\1/\" \
               | grep -v '_SURF_FIND' \
-              && tac ~/.surf/bookmarks)\" " \
+              && tac ~/.config/surf/bookmarks)\" " \
              "| dmenu -t -l 10 -p \"$4\" -w $1)\" && " \
              "xprop -id $1 -f $3 8u -set $3 \"$prop\"", \
              "surf-setprop", winid, r, s, p, NULL \
@@ -191,7 +193,7 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
 #define BM_PICK {\
    .v = (char *[]){ "/bin/sh", "-c", \
      "xprop -id $0 -f _SURF_GO 8s -set _SURF_GO 2>/dev/null \
-     $(tac ~/.surf/bookmarks \
+     $(tac ~/.config/surf/bookmarks \
       | dmenu -p 'Load Bookmark' -i -l 10 -w $0 \
       | awk '{print $1}' || exit 0)", \
     winid, NULL } }
@@ -199,9 +201,9 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
 #define BM_ADD {\
     .v = (const char *[]){ "/bin/sh", "-c", \
          "(echo $(xprop -id $0 _SURF_URI) | cut -d '\"' -f2 " \
-         "&& sort -u ~/.surf/bookmarks) " \
+         "&& sort -u ~/.config/surf/bookmarks) " \
          "| dmenu -i -p 'Save Bookmark' -i -l 10 -w $0 "  \
-         ">> ~/.surf/bookmarks", \
+         ">> ~/.config/surf/bookmarks", \
          winid, NULL } }
 
 /* styles */
