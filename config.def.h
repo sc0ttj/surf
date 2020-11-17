@@ -154,18 +154,9 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
              "| sed \"s/^$2(STRING) = //;s/^\\\"\\(.*\\)\\\"$/\\1/\" \
               | grep -v '_SURF_FIND' \
               && tac ~/.surf/bookmarks)\" " \
-             "| dmenu -l 10 -p \"$4\" -w $1)\" && " \
+             "| dmenu -t -l 10 -p \"$4\" -w $1)\" && " \
              "xprop -id $1 -f $3 8u -set $3 \"$prop\"", \
              "surf-setprop", winid, r, s, p, NULL \
-        } \
-}
-
-/* sc0ttj this is not used - doesn't support custom search engines */
-#define SEARCH() { \
-        .v = (const char *[]){ "/bin/sh", "-c", \
-             "xprop -id $1 -f $2 8s -set $2 \"" \
-             "$(dmenu -p 'Web Search:' -w $1 < /dev/null)\"", \
-             "surf-search", winid, "_SURF_SEARCH", NULL \
         } \
 }
 
@@ -261,9 +252,6 @@ static Key keys[] = {
 	{ MODKEY,                GDK_KEY_g,      spawn,      SETPROP("_SURF_URI", "_SURF_GO", PROMPT_GO) },
 	{ MODKEY,                GDK_KEY_f,      spawn,      SETPROP("_SURF_FIND", "_SURF_FIND", PROMPT_FIND) },
 	{ MODKEY,                GDK_KEY_slash,  spawn,      SETPROP("_SURF_FIND", "_SURF_FIND", PROMPT_FIND) },
-  /* sc0ttj disable this search - does not support custom search engines
- 	{ MODKEY,                GDK_KEY_s,      spawn,      SEARCH() },
-  */
 
 	/* sc0ttj nice bookmarks menu */
 	{ MODKEY,                GDK_KEY_b,      spawn,      BM_PICK },
