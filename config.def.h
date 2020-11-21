@@ -185,7 +185,7 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
 /* VIDEOPLAY(URI) */
 #define VIDEOPLAY(u) {\
         .v = (const char *[]){ "/bin/sh", "-c", \
-             "mpv --really-quiet --x11-name 'mpv via surf' \"$0\"", u, NULL \
+             "mpv -fs \"$0\"", u, NULL \
         } \
 }
 
@@ -233,8 +233,8 @@ static SiteSpecific certs[] = {
 
 /* hotkeys */
 /*
- * If you use anything else but MODKEY and GDK_SHIFT_MASK, don't forget to
- * edit the CLEANMASK() macro.
+ * If you use anything else but MODKEY, GDK_SHIFT_MASK and GDK_MOD1_MASK,  don't
+ * forget to edit the CLEANMASK() macro.
  */
 
 /*
@@ -261,8 +261,10 @@ static Key keys[] = {
 
 	{ MODKEY,                GDK_KEY_q,      exit,       { 0 } },
 
+	/* sc0ttj added hotkey to call external player */
+	{ MODKEY,                GDK_KEY_w,      playexternal, { 0 } },
+
 	{ 0,                     GDK_KEY_Escape, stop,       { 0 } },
-	{ MODKEY,                GDK_KEY_c,      stop,       { 0 } },
 
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_r,      reload,     { .i = 1 } },
 	{ MODKEY,                GDK_KEY_r,      reload,     { .i = 0 } },
@@ -295,7 +297,7 @@ static Key keys[] = {
 	{ MODKEY,                GDK_KEY_equal,  zoom,       { .i = +1 } }, /* sc0ttj use 'equal' and 'plus' */
 
 	{ MODKEY,                GDK_KEY_p,      clipboard,  { .i = 1 } },
-	{ MODKEY,                GDK_KEY_y,      clipboard,  { .i = 0 } },
+	{ MODKEY,                GDK_KEY_c,      clipboard,  { .i = 0 } },
 
 	{ MODKEY,                GDK_KEY_n,      find,       { .i = +1 } },
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_n,      find,       { .i = -1 } },
@@ -304,20 +306,18 @@ static Key keys[] = {
 	{ MODKEY,                GDK_KEY_t,      showcert,   { 0 } },
 
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_a,      togglecookiepolicy, { 0 } },
-	{ 0,                     GDK_KEY_F11,    togglefullscreen, { 0 } },
-	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_o,      toggleinspector, { 0 } },
+	{ 0,                     GDK_KEY_F11,    togglefullscreen,   { 0 } },
+	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_i,      toggleinspector,    { 0 } },
 
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_c,      toggle,     { .i = CaretBrowsing } },
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_f,      toggle,     { .i = FrameFlattening } },
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_g,      toggle,     { .i = Geolocation } },
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_s,      toggle,     { .i = JavaScript } },
-	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_i,      toggle,     { .i = LoadImages } },
+	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_o,      toggle,     { .i = LoadImages } },
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_v,      toggle,     { .i = Plugins } },
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_b,      toggle,     { .i = ScrollBars } },
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_t,      toggle,     { .i = StrictTLS } },
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_m,      toggle,     { .i = Style } },
-	/* sc0ttj added hotkey to call externel player */
-	{ MODKEY,                GDK_KEY_w,      playexternal, { 0 } },
 
   /* sc0ttj support special keyboard keys.. see this link: */
   /* https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values */
@@ -338,11 +338,12 @@ static Key keys[] = {
 /* target can be OnDoc, OnLink, OnImg, OnMedia, OnEdit, OnBar, OnSel, OnAny */
 static Button buttons[] = {
 	/* target       event mask      button  function        argument        stop event */
-	{ OnLink,       0,              2,      clicknewwindow, { .i = 0 },     1 },
-	{ OnLink,       MODKEY,         2,      clicknewwindow, { .i = 1 },     1 },
-	{ OnLink,       MODKEY,         1,      clicknewwindow, { .i = 1 },     1 },
-	{ OnAny,        0,              8,      clicknavigate,  { .i = -1 },    1 },
-	{ OnAny,        0,              9,      clicknavigate,  { .i = +1 },    1 },
-	{ OnMedia,      MODKEY,         1,      clickexternplayer, { 0 },       1 },
+	{ OnLink,       0,              2,      clicknewwindow,    { .i = 0 },     1 },
+	{ OnLink,       MODKEY,         2,      clicknewwindow,    { .i = 1 },     1 },
+	{ OnLink,       MODKEY,         1,      clicknewwindow,    { .i = 1 },     1 },
+	{ OnAny,        0,              8,      clicknavigate,     { .i = -1 },    1 },
+	{ OnAny,        0,              9,      clicknavigate,     { .i = +1 },    1 },
+	{ OnMedia,      MODKEY,         1,      clickexternplayer, { 0 },          1 },
+	{ OnLink,       MODKEY,         1,      clickexternplayer, { 0 },          1 },
 };
 
