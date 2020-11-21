@@ -194,7 +194,7 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
    .v = (char *[]){ "/bin/sh", "-c", \
      "xprop -id $0 -f _SURF_GO 8s -set _SURF_GO 2>/dev/null \
      $(tac ~/.config/surf/bookmarks \
-      | dmenu -p 'Load Bookmark' -i -l 10 -w $0 \
+      | dmenu -p 'Load Bookmark' -l 10 -w $0 \
       | awk '{print $1}' || exit 0)", \
     winid, NULL } }
 
@@ -202,7 +202,7 @@ static WebKitFindOptions findopts = WEBKIT_FIND_OPTIONS_CASE_INSENSITIVE |
     .v = (const char *[]){ "/bin/sh", "-c", \
          "(echo $(xprop -id $0 _SURF_URI) | cut -d '\"' -f2 " \
          "&& sort -u ~/.config/surf/bookmarks) " \
-         "| dmenu -i -p 'Save Bookmark' -i -l 10 -w $0 "  \
+         "| dmenu -p 'Save Bookmark' -l 10 -w $0 "  \
          ">> ~/.config/surf/bookmarks", \
          winid, NULL } }
 
